@@ -7,6 +7,7 @@
 
 namespace Reliese\Coders\Model\Relations;
 
+use Reliese\Coders\Model\Factory;
 use Reliese\Support\Dumper;
 use Illuminate\Support\Fluent;
 use Reliese\Coders\Model\Model;
@@ -60,7 +61,7 @@ abstract class HasOneOrMany implements Relation
     {
         $body = 'return $this->'.$this->method().'(';
 
-        $body .= $this->related->getQualifiedUserClassName().'::class';
+        $body .= $this->related->getClassName().'::class';
 
         if ($this->needsForeignKey()) {
             $body .= ', '.Dumper::export($this->foreignKey());
@@ -75,13 +76,21 @@ abstract class HasOneOrMany implements Relation
         return $body;
     }
 
-    public function rBody()
-    {
-        // TODO: Implement bodyR() method.
-    }
     public function rGetMethod()
     {
-        // TODO: Implement bodyR() method.
+        return 'where is this shit?';
+    }
+
+    public function getDoc($level = "\n\t")
+    {
+        return 'where is this shit2?';
+    }
+
+    public function rBody($level = "\n\t")
+    {
+        $body[] = '/** @noinspection PhpUndefinedFieldInspection */';
+        $body[] = 'return $this->'.str_replace('fk_', '', $this->foreignKey()).';';
+        return implode($level, $body);
     }
 
     /**
@@ -131,8 +140,4 @@ abstract class HasOneOrMany implements Relation
         return $this->command->references[0];
     }
 
-    public function getRDoc()
-    {
-        // TODO: Implement getRDoc() method.
-    }
 }

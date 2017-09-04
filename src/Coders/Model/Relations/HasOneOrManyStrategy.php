@@ -8,6 +8,7 @@
 namespace Reliese\Coders\Model\Relations;
 
 use Illuminate\Support\Fluent;
+use Reliese\Coders\Model\Factory;
 use Reliese\Coders\Model\Model;
 use Reliese\Coders\Model\Relation;
 
@@ -61,10 +62,6 @@ class HasOneOrManyStrategy implements Relation
         return $this->relation->body();
     }
 
-    public function getDoc()
-    {
-        // TODO: Implement getDoc() method.
-    }
 
     /**
      * @return string
@@ -74,17 +71,30 @@ class HasOneOrManyStrategy implements Relation
         return $this->relation->getRelatedClass();
     }
 
-    public function rBody()
+    public function rBody($level = "\n\t\t")
     {
-        // TODO: Implement bodyR() method.
+        $body[] = '/** @noinspection PhpIncompatibleReturnTypeInspection */';
+        $body[] = 'return $this->'.$this->name().'->get();';
+        return implode($level, $body);
     }
 
     public function rGetMethod()
     {
-        // TODO: Implement rGetMethod() method.
+        return Factory::transAttToMethod($this->name(), Factory::PREFIX_GET);
     }
-    public function getRDoc()
+    public function getRDoc($level = "\n\t")
     {
-        // TODO: Implement getRDoc() method.
+        $doc[] = '/**';
+        $doc[] = ' * @return '.$this->getRelatedClass().'[]';
+        $doc[] = '*/';
+        return implode($level, $doc);
+    }
+
+    public function getDoc($level = "\n\t")
+    {
+        $doc[] = '/**';
+        $doc[] = ' * @return \Illuminate\Database\Eloquent\Relations\hasMany';
+        $doc[] = '*/';
+        return implode($level, $doc);
     }
 }

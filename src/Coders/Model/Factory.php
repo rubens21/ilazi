@@ -65,10 +65,10 @@ class Factory
     protected $mutators = [];
 
     private $ignoreAtt = [
-        'id'
+        'id', 'created_at', 'updated_at'
     ];
 
-    private $namespaces = [];
+    private $imports = [];
 
     /**
      * ModelsFactory constructor.
@@ -245,11 +245,12 @@ class Factory
     {
         $template = str_replace('{{date}}', Carbon::now()->toRssString(), $template);
         $template = str_replace('{{namespace}}', $model->getNamespace(), $template);
-        $template = str_replace('{{parent}}', $model->getParentClass(), $template);
+        $template = str_replace('{{parent_full}}', $model->getParentClass(), $template);
+        $template = str_replace('{{parent}}', basename(str_replace('\\', '/', $model->getParentClass())), $template);
         $template = str_replace('{{class}}', $model->getClassName(), $template);
         $template = str_replace('{{body}}', $this->body($model), $template);
-        $template = str_replace('{{imports}}', $this->getNamespaces($model), $template);
         $template = str_replace('{{properties}}', $this->properties($model), $template);
+        $template = str_replace('{{imports}}', $this->getImports($model), $template);
 
         return $template;
     }
@@ -284,12 +285,18 @@ class Factory
             $annotations .= "\n * ";
         }
 
+        $size = 10;
         foreach ($model->getProperties() as $name => $hint) {
             if(!in_array($name, $this->ignoreAtt) && !in_array($name, $relations)) {
-                $annotations .= $this->class->annotation('method', "\$this ".self::transAttToMethod($name,
+                $import = explode('\\', $hint);
+                if(count($import) > 1) {
+                    $this->addImports($hint, $model);
+                    $hint = array_pop($import);
+                }
+                $annotations .= $this->class->annotation('method', str_pad("\$this", $size, " ").' ' .self::transAttToMethod($name,
                         self::PREFIX_SET) . '(' . $hint . ' $' . $name . ') ');
-                $annotations .= $this->class->annotation('method', "$hint ".self::transAttToMethod($name,
-                        self::PREFIX_GET) . '() ');
+                $annotations .= $this->class->annotation('method', str_pad($hint, $size, " ").' '.self::transAttToMethod($name,
+                        self::PREFIX_GET, $hint) . '() ');
             }
         }
 
@@ -297,16 +304,18 @@ class Factory
 
         return $annotations;
     }
+
     /**
      * Translate the name of the attribute to a method name
      *
      * @param $name
      * @param $prefix
+     * @param bool $hint
      * @return string
      */
-    public static function transAttToMethod($name, $prefix)
+    public static function transAttToMethod($name, $prefix, $hint = false)
     {
-        return $prefix . studly_case($name);
+        return ($hint === 'bool' && $prefix === self::PREFIX_GET ? 'is' : $prefix). studly_case($name);
     }
 
     /**
@@ -400,13 +409,13 @@ class Factory
 
         foreach ($model->getRelations() as $constraint) {
             $body .= "\n\n\t".$constraint->getDoc();
-            $body .= $this->class->method($constraint->name(), $constraint->body(), ['before' => "\n"]);
+            $body .= $this->class->method($constraint->name(), $constraint->body());
 
             $body .= "\n\n\t".$constraint->getRDoc();
-            $body .= $this->class->method($constraint->rGetMethod(), $constraint->rBody(), ['before' => "\n"]);
+            $body .= $this->class->method($constraint->rGetMethod(), $constraint->rBody());
 
             if(in_array(get_class($constraint), [BelongsTo::class, BelongsToMany::class])) {
-                $this->addNamespace($constraint->hint(), $model);
+                $this->addImports($constraint->hint(), $model);
             }
 
         }
@@ -514,15 +523,15 @@ class Factory
      * @param \Reliese\Coders\Model\Model $model
      * @return string
      */
-    private function getNamespaces(Model $model)
+    private function getImports(Model $model)
     {
-        return implode(";\n", $this->namespaces[$model->getClassName()]??[]);
+        return isset($this->imports[$model->getClassName()]) ? implode(";\n", $this->imports[$model->getClassName()]).';' : '';
     }
 
-    protected function addNamespace($className, Model $model)
+    protected function addImports($className, Model $model)
     {
         if($className !== $model->getNamespace()) {
-            $this->namespaces[$model->getClassName()][] = 'use '.$className;
+            $this->imports[$model->getClassName()][] = 'use '.$className;
         }
     }
 

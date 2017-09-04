@@ -64,6 +64,7 @@ class ReferenceFactory
     {
         $pivot = $this->getRelatedBlueprint()->table();
         $firstRecord = $this->parent->getRecordName();
+        echo "\n$pivot -> $firstRecord";
 
         // See whether this potencial pivot table has the parent record name in it.
         // Not sure whether we should only take into account composite primary keys.

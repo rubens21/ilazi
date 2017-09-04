@@ -45,4 +45,8 @@ class HasOne extends HasOneOrMany
     }
 
 
+    public function getRDoc()
+    {
+        // TODO: Implement getRDoc() method.
+    }
 }

@@ -57,6 +57,7 @@ class BelongsToMany implements Relation
         $this->parent = $parent;
         $this->pivot = $pivot;
         $this->reference = $reference;
+        dd($parent);
     }
 
     /**

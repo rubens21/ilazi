@@ -100,10 +100,10 @@ class BelongsTo implements Relation
         return Factory::transAttToMethod($this->name(), Factory::PREFIX_GET);
     }
 
-    public function rBody($level = "\n\t")
+    public function rBody($level = "\n\t\t")
     {
         $body[] = '/** @noinspection PhpUndefinedFieldInspection */';
-        $body[] = 'return $this->'.str_replace('fk_', '', $this->foreignKey()).';';
+        $body[] = 'return $this->'.str_replace('fk_', '', $this->foreignKey());
         return implode($level, $body);
     }
 
