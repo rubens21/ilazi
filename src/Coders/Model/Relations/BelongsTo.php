@@ -28,7 +28,7 @@ class BelongsTo implements Relation
     /**
      * @var \Reliese\Coders\Model\Model
      */
-    protected $related;
+    public $related;
 
     /**
      * BelongsToWriter constructor.
@@ -93,6 +93,14 @@ class BelongsTo implements Relation
         return $body;
     }
 
+    public function getFieldName()
+    {
+        return $this->foreignKey();
+    }
+    public function getAnnotation()
+    {
+        return $this->related->getClassName();
+    }
     /**
      * @return string
      */

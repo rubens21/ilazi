@@ -17,6 +17,16 @@ use Illuminate\Database\DatabaseManager;
 
 class Factory
 {
+
+    /**
+     * Prefixed of the "get" magic methods
+     */
+    const PREFIX_GET = 'get';
+    /**
+     *Prefixed of the "set" magic methods
+     */
+    const PREFIX_SET = 'set';
+
     /**
      * @var \Illuminate\Database\DatabaseManager
      */
@@ -51,6 +61,10 @@ class Factory
      * @var \Reliese\Coders\Model\Mutator[]
      */
     protected $mutators = [];
+
+    private $ignoreAtt = [
+        'id'
+    ];
 
     /**
      * ModelsFactory constructor.
@@ -196,8 +210,8 @@ class Factory
         foreach ($references as &$related) {
             $blueprint = $related['blueprint'];
             $related['model'] = $model->getBlueprint()->is($blueprint->schema(), $blueprint->table())
-                                ? $model
-                                : $this->makeModel($blueprint->schema(), $blueprint->table(), false);
+                ? $model
+                : $this->makeModel($blueprint->schema(), $blueprint->table(), false);
         }
 
         return $references;
@@ -244,9 +258,19 @@ class Factory
     {
         // Process property annotations
         $annotations = '';
+        $relations = [];
+        foreach ($model->getRelations() as $name => $relation) {
+            // TODO: Handle collisions, perhaps rename the relation.
+            if ($model->hasProperty($name)) {
+                continue;
+            }
 
-        foreach ($model->getProperties() as $name => $hint) {
-            $annotations .= $this->class->annotation('property', "$hint \$$name");
+            if(method_exists($relation, 'getAnnotation')) {
+                $annotations .= $this->class->annotation('method',
+                    $relation->hint().' '.self::transAttToMethod($relation->getAnnotation(),
+                        self::PREFIX_GET) . '()');
+                $relations[] = $relation->getFieldName();
+            }
         }
 
         if ($model->hasRelations()) {
@@ -254,15 +278,29 @@ class Factory
             $annotations .= "\n * ";
         }
 
-        foreach ($model->getRelations() as $name => $relation) {
-            // TODO: Handle collisions, perhaps rename the relation.
-            if ($model->hasProperty($name)) {
-                continue;
+        foreach ($model->getProperties() as $name => $hint) {
+            if(!in_array($name, $this->ignoreAtt) && !in_array($name, $relations)) {
+                $annotations .= $this->class->annotation('method', "\$this ".self::transAttToMethod($name,
+                        self::PREFIX_SET) . '(' . $hint . ' $' . $name . ') ');
+                $annotations .= $this->class->annotation('method', "$hint ".self::transAttToMethod($name,
+                        self::PREFIX_GET) . '() ');
             }
-            $annotations .= $this->class->annotation('property', $relation->hint()." \$$name");
         }
 
+
+
         return $annotations;
+    }
+    /**
+     * Translate the name of the attribute to a method name
+     *
+     * @param $name
+     * @param $prefix
+     * @return string
+     */
+    private static function transAttToMethod($name, $prefix)
+    {
+        return $prefix . studly_case($name);
     }
 
     /**
