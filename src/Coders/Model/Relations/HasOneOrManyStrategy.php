@@ -60,4 +60,31 @@ class HasOneOrManyStrategy implements Relation
     {
         return $this->relation->body();
     }
+
+    public function getDoc()
+    {
+        // TODO: Implement getDoc() method.
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelatedClass()
+    {
+        return $this->relation->getRelatedClass();
+    }
+
+    public function rBody()
+    {
+        // TODO: Implement bodyR() method.
+    }
+
+    public function rGetMethod()
+    {
+        // TODO: Implement rGetMethod() method.
+    }
+    public function getRDoc()
+    {
+        // TODO: Implement getRDoc() method.
+    }
 }

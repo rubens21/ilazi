@@ -39,4 +39,22 @@ class HasMany extends HasOneOrMany
     {
         return 'hasMany';
     }
+
+    public function getDoc()
+    {
+        // TODO: Implement getDoc() method.
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelatedClass()
+    {
+        // TODO: Implement getRelatedClass() method.
+    }
+
+    public function getRDoc()
+    {
+        // TODO: Implement getRDoc() method.
+    }
 }

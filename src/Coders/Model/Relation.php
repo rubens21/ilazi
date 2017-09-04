@@ -17,10 +17,20 @@ interface Relation
     /**
      * @return string
      */
+    public function getRelatedClass();
+
+    /**
+     * @return string
+     */
     public function name();
 
     /**
      * @return string
      */
     public function body();
+    public function rBody();
+    public function rGetMethod();
+    public function getRDoc();
+
+    public function getDoc();
 }

@@ -216,4 +216,36 @@ class BelongsToMany implements Relation
             return Dumper::export($field);
         }, $fields));
     }
+
+    public function getDoc()
+    {
+        // TODO: Implement getDoc() method.
+    }
+    public function getFieldName()
+    {
+        return $this->foreignKey();
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelatedClass()
+    {
+        return $this->reference->getClassName();
+    }
+
+    public function rBody()
+    {
+        // TODO: Implement bodyR() method.
+    }
+
+    public function rGetMethod()
+    {
+        // TODO: Implement rGetMethod() method.
+    }
+
+    public function getRDoc()
+    {
+        // TODO: Implement getRDoc() method.
+    }
 }

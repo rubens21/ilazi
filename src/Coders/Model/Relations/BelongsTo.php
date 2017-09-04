@@ -8,6 +8,7 @@
 namespace Reliese\Coders\Model\Relations;
 
 use Illuminate\Support\Str;
+use Reliese\Coders\Model\Factory;
 use Reliese\Support\Dumper;
 use Illuminate\Support\Fluent;
 use Reliese\Coders\Model\Model;
@@ -49,11 +50,12 @@ class BelongsTo implements Relation
      */
     public function name()
     {
+        $name = str_replace('fk_', '', $this->foreignKey());
         if ($this->parent->usesSnakeAttributes()) {
-            return Str::snake($this->related->getClassName());
+            return Str::snake($name);
         }
 
-        return Str::camel($this->related->getClassName());
+        return Str::camel($name);
     }
 
     /**
@@ -63,7 +65,7 @@ class BelongsTo implements Relation
     {
         $body = 'return $this->belongsTo(';
 
-        $body .= $this->related->getQualifiedUserClassName().'::class';
+        $body .= $this->related->getClassName().'::class';
 
         if ($this->needsForeignKey()) {
             $body .= ', '.Dumper::export($this->foreignKey());
@@ -93,6 +95,34 @@ class BelongsTo implements Relation
         return $body;
     }
 
+    public function rGetMethod()
+    {
+        return Factory::transAttToMethod($this->name(), Factory::PREFIX_GET);
+    }
+
+    public function rBody($level = "\n\t")
+    {
+        $body[] = '/** @noinspection PhpUndefinedFieldInspection */';
+        $body[] = 'return $this->'.str_replace('fk_', '', $this->foreignKey()).';';
+        return implode($level, $body);
+    }
+
+    public function getDoc($level = "\n\t")
+    {
+        $doc[] = '/**';
+        $doc[] = ' * @return \Illuminate\Database\Eloquent\Relations\BelongsTo';
+        $doc[] = '*/';
+        return implode($level, $doc);
+    }
+
+    public function getRDoc($level = "\n\t")
+    {
+        $doc[] = '/**';
+        $doc[] = ' * @return '.$this->getRelatedClass();
+        $doc[] = '*/';
+        return implode($level, $doc);
+    }
+
     public function getFieldName()
     {
         return $this->foreignKey();
@@ -108,6 +138,8 @@ class BelongsTo implements Relation
     {
         return $this->related->getQualifiedUserClassName();
     }
+
+
 
     /**
      * @return bool
@@ -178,4 +210,14 @@ class BelongsTo implements Relation
     {
         return count($this->command->references) > 1;
     }
+
+    /**
+     * @return string
+     */
+    public function getRelatedClass()
+    {
+        return $this->related->getClassName();
+    }
+
+
 }

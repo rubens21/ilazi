@@ -9,6 +9,8 @@ namespace Reliese\Coders\Model;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Reliese\Coders\Model\Relations\BelongsTo;
+use Reliese\Coders\Model\Relations\BelongsToMany;
 use Reliese\Meta\Blueprint;
 use Reliese\Support\Classify;
 use Reliese\Meta\SchemaManager;
@@ -65,6 +67,8 @@ class Factory
     private $ignoreAtt = [
         'id'
     ];
+
+    private $namespaces = [];
 
     /**
      * ModelsFactory constructor.
@@ -240,11 +244,12 @@ class Factory
     protected function fillTemplate($template, Model $model)
     {
         $template = str_replace('{{date}}', Carbon::now()->toRssString(), $template);
-        $template = str_replace('{{namespace}}', $model->getBaseNamespace(), $template);
+        $template = str_replace('{{namespace}}', $model->getNamespace(), $template);
         $template = str_replace('{{parent}}', $model->getParentClass(), $template);
-        $template = str_replace('{{properties}}', $this->properties($model), $template);
         $template = str_replace('{{class}}', $model->getClassName(), $template);
         $template = str_replace('{{body}}', $this->body($model), $template);
+        $template = str_replace('{{imports}}', $this->getNamespaces($model), $template);
+        $template = str_replace('{{properties}}', $this->properties($model), $template);
 
         return $template;
     }
@@ -265,12 +270,13 @@ class Factory
                 continue;
             }
 
-            if(method_exists($relation, 'getAnnotation')) {
-                $annotations .= $this->class->annotation('method',
-                    $relation->hint().' '.self::transAttToMethod($relation->getAnnotation(),
-                        self::PREFIX_GET) . '()');
+//            $annotations .= $this->class->annotation('method',
+//                $relation->getRelatedClass().' '.self::transAttToMethod($relation->getRelatedClass(),
+//                    self::PREFIX_GET) . '()');
+            if(in_array(get_class($relation), [BelongsTo::class, BelongsToMany::class])) {
                 $relations[] = $relation->getFieldName();
             }
+
         }
 
         if ($model->hasRelations()) {
@@ -298,7 +304,7 @@ class Factory
      * @param $prefix
      * @return string
      */
-    private static function transAttToMethod($name, $prefix)
+    public static function transAttToMethod($name, $prefix)
     {
         return $prefix . studly_case($name);
     }
@@ -393,7 +399,16 @@ class Factory
         }
 
         foreach ($model->getRelations() as $constraint) {
+            $body .= "\n\n\t".$constraint->getDoc();
             $body .= $this->class->method($constraint->name(), $constraint->body(), ['before' => "\n"]);
+
+            $body .= "\n\n\t".$constraint->getRDoc();
+            $body .= $this->class->method($constraint->rGetMethod(), $constraint->rBody(), ['before' => "\n"]);
+
+            if(in_array(get_class($constraint), [BelongsTo::class, BelongsToMany::class])) {
+                $this->addNamespace($constraint->hint(), $model);
+            }
+
         }
 
         // Make sure there not undesired line breaks
@@ -494,4 +509,21 @@ class Factory
 
         return $this->config->get($blueprint, $key, $default);
     }
+
+    /**
+     * @param \Reliese\Coders\Model\Model $model
+     * @return string
+     */
+    private function getNamespaces(Model $model)
+    {
+        return implode(";\n", $this->namespaces[$model->getClassName()]??[]);
+    }
+
+    protected function addNamespace($className, Model $model)
+    {
+        if($className !== $model->getNamespace()) {
+            $this->namespaces[$model->getClassName()][] = 'use '.$className;
+        }
+    }
+
 }

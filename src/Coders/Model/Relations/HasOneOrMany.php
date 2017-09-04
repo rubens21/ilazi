@@ -75,6 +75,23 @@ abstract class HasOneOrMany implements Relation
         return $body;
     }
 
+    public function rBody()
+    {
+        // TODO: Implement bodyR() method.
+    }
+    public function rGetMethod()
+    {
+        // TODO: Implement bodyR() method.
+    }
+
+    /**
+     * @return string
+     */
+    public function getRelatedClass()
+    {
+        return $this->related->getClassName();
+    }
+
     /**
      * @return string
      */
@@ -112,5 +129,10 @@ abstract class HasOneOrMany implements Relation
     protected function localKey()
     {
         return $this->command->references[0];
+    }
+
+    public function getRDoc()
+    {
+        // TODO: Implement getRDoc() method.
     }
 }

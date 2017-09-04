@@ -38,4 +38,11 @@ class HasOne extends HasOneOrMany
     {
         return 'hasOne';
     }
+
+    public function getDoc()
+    {
+        // TODO: Implement getDoc() method.
+    }
+
+
 }
