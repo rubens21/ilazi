@@ -1,6 +1,6 @@
 <?php
 
-use Reliese\Meta\Blueprint;
+use ILazi\Meta\Blueprint;
 
 /**
  * Created by Cristian.

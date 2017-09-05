@@ -5,17 +5,17 @@
  * Date: 11/09/16 09:26 PM.
  */
 
-namespace Reliese\Coders\Model\Relations;
+namespace ILazi\Coders\Model\Relations;
 
 use Illuminate\Support\Fluent;
-use Reliese\Coders\Model\Factory;
-use Reliese\Coders\Model\Model;
-use Reliese\Coders\Model\Relation;
+use ILazi\Coders\Model\Factory;
+use ILazi\Coders\Model\Model;
+use ILazi\Coders\Model\Relation;
 
 class HasOneOrManyStrategy implements Relation
 {
     /**
-     * @var \Reliese\Coders\Model\Relation
+     * @var \ILazi\Coders\Model\Relation
      */
     protected $relation;
 
@@ -23,8 +23,8 @@ class HasOneOrManyStrategy implements Relation
      * HasManyWriter constructor.
      *
      * @param \Illuminate\Support\Fluent $command
-     * @param \Reliese\Coders\Model\Model $parent
-     * @param \Reliese\Coders\Model\Model $related
+     * @param \ILazi\Coders\Model\Model $parent
+     * @param \ILazi\Coders\Model\Model $related
      */
     public function __construct(Fluent $command, Model $parent, Model $related)
     {

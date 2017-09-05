@@ -5,7 +5,7 @@
  * Date: 09/10/16 07:34 PM.
  */
 
-namespace Reliese\Database\Eloquent;
+namespace ILazi\Database\Eloquent;
 
 trait BitBooleans
 {

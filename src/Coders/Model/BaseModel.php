@@ -6,7 +6,7 @@
  * Time: 9:35 AM
  */
 
-namespace Reliese\Coders\Model;
+namespace ILazi\Coders\Model;
 
 
 use Carbon\Carbon;

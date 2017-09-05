@@ -1,9 +1,9 @@
 <?php
 
-namespace Reliese\Coders\Console;
+namespace ILazi\Coders\Console;
 
 use Illuminate\Console\Command;
-use Reliese\Coders\Model\Factory;
+use ILazi\Coders\Model\Factory;
 use Illuminate\Contracts\Config\Repository;
 
 class CodeModelsCommand extends Command
@@ -26,7 +26,7 @@ class CodeModelsCommand extends Command
     protected $description = 'Parse connection schema into models';
 
     /**
-     * @var \Reliese\Coders\Model\Factory
+     * @var \ILazi\Coders\Model\Factory
      */
     protected $models;
 
@@ -38,7 +38,7 @@ class CodeModelsCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param \Reliese\Coders\Model\Factory $models
+     * @param \ILazi\Coders\Model\Factory $models
      * @param \Illuminate\Contracts\Config\Repository $config
      */
     public function __construct(Factory $models, Repository $config)

@@ -52,7 +52,7 @@ return [
         |
         */
 
-        'parent' => Reliese\Database\Eloquent\Model::class,
+        'parent' => ILazi\Database\Eloquent\Model::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -68,8 +68,8 @@ return [
         */
 
         'use' => [
-            // Reliese\Database\Eloquent\BitBooleans::class,
-            // Reliese\Database\Eloquent\BlamableBehavior::class,
+            // ILazi\Database\Eloquent\BitBooleans::class,
+            // ILazi\Database\Eloquent\BlamableBehavior::class,
         ],
 
         /*
@@ -295,7 +295,7 @@ return [
     //     'snake_attributes' => false,
     //     'qualified_tables' => true,
     //     'use' => [
-    //         Reliese\Database\Eloquent\BitBooleans::class,
+    //         ILazi\Database\Eloquent\BitBooleans::class,
     //     ],
     //     'except' => ['migrations'],
     //      // Table Specifics Bellow:

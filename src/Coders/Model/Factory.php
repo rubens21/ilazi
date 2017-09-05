@@ -5,15 +5,15 @@
  * Date: 19/09/16 11:58 PM.
  */
 
-namespace Reliese\Coders\Model;
+namespace ILazi\Coders\Model;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Reliese\Coders\Model\Relations\BelongsTo;
-use Reliese\Coders\Model\Relations\BelongsToMany;
-use Reliese\Meta\Blueprint;
-use Reliese\Support\Classify;
-use Reliese\Meta\SchemaManager;
+use ILazi\Coders\Model\Relations\BelongsTo;
+use ILazi\Coders\Model\Relations\BelongsToMany;
+use ILazi\Meta\Blueprint;
+use ILazi\Support\Classify;
+use ILazi\Meta\SchemaManager;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\DatabaseManager;
 
@@ -35,7 +35,7 @@ class Factory
     private $db;
 
     /**
-     * @var \Reliese\Meta\SchemaManager
+     * @var \ILazi\Meta\SchemaManager
      */
     protected $schemas;
 
@@ -45,22 +45,22 @@ class Factory
     protected $files;
 
     /**
-     * @var \Reliese\Support\Classify
+     * @var \ILazi\Support\Classify
      */
     protected $class;
 
     /**
-     * @var \Reliese\Coders\Model\Config
+     * @var \ILazi\Coders\Model\Config
      */
     protected $config;
 
     /**
-     * @var \Reliese\Coders\Model\ModelManager
+     * @var \ILazi\Coders\Model\ModelManager
      */
     protected $models;
 
     /**
-     * @var \Reliese\Coders\Model\Mutator[]
+     * @var \ILazi\Coders\Model\Mutator[]
      */
     protected $mutators = [];
 
@@ -75,8 +75,8 @@ class Factory
      *
      * @param \Illuminate\Database\DatabaseManager $db
      * @param \Illuminate\Filesystem\Filesystem $files
-     * @param \Reliese\Support\Classify $writer
-     * @param \Reliese\Coders\Model\Config $config
+     * @param \ILazi\Support\Classify $writer
+     * @param \ILazi\Coders\Model\Config $config
      */
     public function __construct(DatabaseManager $db, Filesystem $files, Classify $writer, Config $config)
     {
@@ -87,7 +87,7 @@ class Factory
     }
 
     /**
-     * @return \Reliese\Coders\Model\Mutator
+     * @return \ILazi\Coders\Model\Mutator
      */
     public function mutate()
     {
@@ -95,7 +95,7 @@ class Factory
     }
 
     /**
-     * @return \Reliese\Coders\Model\ModelManager
+     * @return \ILazi\Coders\Model\ModelManager
      */
     protected function models()
     {
@@ -139,7 +139,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Meta\Blueprint $blueprint
+     * @param \ILazi\Meta\Blueprint $blueprint
      *
      * @return bool
      */
@@ -178,7 +178,7 @@ class Factory
      *
      * @param bool $withRelations
      *
-     * @return \Reliese\Coders\Model\Model
+     * @return \ILazi\Coders\Model\Model
      */
     public function makeModel($schema, $table, $withRelations = true)
     {
@@ -188,7 +188,7 @@ class Factory
     /**
      * @param string $schema
      *
-     * @return \Reliese\Meta\Schema
+     * @return \ILazi\Meta\Schema
      */
     public function makeSchema($schema)
     {
@@ -196,7 +196,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      * @todo: Delegate workload to SchemaManager and ModelManager
      *
      * @return array
@@ -222,7 +222,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      * @param string $name
      *
      * @return string
@@ -237,7 +237,7 @@ class Factory
 
     /**
      * @param string $template
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      *
      * @return mixed
      */
@@ -256,7 +256,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      *
      * @return string
      */
@@ -319,7 +319,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      *
      * @return string
      */
@@ -427,7 +427,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      *
      * @param array $custom
      *
@@ -455,7 +455,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      *
      * @return bool
      */
@@ -465,7 +465,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      */
     protected function createUserFile(Model $model)
     {
@@ -481,7 +481,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      *
      * @return string
      */
@@ -504,11 +504,11 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Meta\Blueprint|null $blueprint
+     * @param \ILazi\Meta\Blueprint|null $blueprint
      * @param string $key
      * @param mixed $default
      *
-     * @return mixed|\Reliese\Coders\Model\Config
+     * @return mixed|\ILazi\Coders\Model\Config
      */
     public function config(Blueprint $blueprint = null, $key = null, $default = null)
     {
@@ -520,7 +520,7 @@ class Factory
     }
 
     /**
-     * @param \Reliese\Coders\Model\Model $model
+     * @param \ILazi\Coders\Model\Model $model
      * @return string
      */
     private function getImports(Model $model)
