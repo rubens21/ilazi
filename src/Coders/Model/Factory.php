@@ -379,9 +379,9 @@ class Factory
             $body .= $this->class->field('dateFormat', $model->getDateFormat());
         }
 
-        if ($model->doesNotUseSnakeAttributes()) {
-            $body .= $this->class->field('snakeAttributes', false, ['visibility' => 'public static']);
-        }
+//        if ($model->doesNotUseSnakeAttributes()) {
+//            $body .= $this->class->field('snakeAttributes', false, ['visibility' => 'public static']);
+//        }
 
         if ($model->hasCasts()) {
             $body .= $this->class->field('casts', $model->getCasts(), ['before' => "\n"]);
@@ -395,9 +395,9 @@ class Factory
             $body .= $this->class->field('hidden', $model->getHidden(), ['before' => "\n"]);
         }
 
-        if ($model->hasFillable() && $model->doesNotUseBaseFiles()) {
-            $body .= $this->class->field('fillable', $model->getFillable(), ['before' => "\n"]);
-        }
+//        if ($model->hasFillable() && $model->doesNotUseBaseFiles()) {
+//            $body .= $this->class->field('fillable', $model->getFillable(), ['before' => "\n"]);
+//        }
 
         if ($model->hasHints() && $model->usesHints()) {
             $body .= $this->class->field('hints', $model->getHints(), ['before' => "\n"]);

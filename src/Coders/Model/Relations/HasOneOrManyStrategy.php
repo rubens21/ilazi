@@ -74,7 +74,7 @@ class HasOneOrManyStrategy implements Relation
     public function rBody($level = "\n\t\t")
     {
         $body[] = '/** @noinspection PhpIncompatibleReturnTypeInspection */';
-        $body[] = 'return $this->'.$this->name().'->get();';
+        $body[] = 'return $this->'.$this->name().';';
         return implode($level, $body);
     }
 
