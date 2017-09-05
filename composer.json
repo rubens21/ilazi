@@ -1,12 +1,7 @@
 {
-    "name": "reliese/laravel",
+    "name": "rubens21/ilazi",
     "description": "Reliese Components for Laravel Framework code generation.",
     "keywords": ["reliese", "laravel"],
-    "homepage": "http://cristianllanos.com",
-    "support": {
-        "issues": "https://github.com/reliese/laravel/issues",
-        "source": "https://github.com/reliese/laravel"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -30,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Reliese\\": "src/"
+            "ILazi\\": "src/"
         }
     },
     "autoload-dev": {
@@ -44,7 +39,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Reliese\\Coders\\CodersServiceProvider"
+                "ILazi\\Coders\\CodersServiceProvider"
             ]
         }
     }
